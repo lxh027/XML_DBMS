@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "./;proto";
+
+service DBServer {
+  rpc TestConn(Ping) returns (Pong) {};
+  rpc Auth(AuthRequest) returns (AuthResponse) {};
+  rpc SqlExecute(SQLExpression) returns (SqlResult) {};
+}
+
+message Ping {
+  string ping = 1;
+}
+
+message Pong {
+  string pong = 1;
+}
+
+message AuthRequest {
+  string password = 1;
+}
+
+message AuthResponse {
+  enum Status {
+    OK = 0;
+    Error = 1;
+    Undefined = 2;
+  }
+  Status status = 1;
+  string message = 2;
+}
+
+message SQLExpression {
+  string sql = 1;
+}
+
+message SqlResult {
+  enum Status {
+    OK = 0;
+    Syntax_Error = 1;
+    Sql_Error = 2;
+    Undefined = 3;
+  }
+  message DataRow {
+    repeated string dataCell = 1;
+  }
+  Status status = 1;
+  string message = 2;
+  repeated string metaData = 3;
+  repeated DataRow data = 4;
+}
