@@ -1,0 +1,10 @@
+gin:
+  host: 127.0.0.1
+  port: 8080
+  mode: debug
+
+session:
+  key: xml_dbms_session_key
+  name: xml_dbms
+  age: 86400
+  path: /
