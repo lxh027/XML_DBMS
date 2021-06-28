@@ -9,7 +9,7 @@ import (
 )
 func main() {
 	// Test Rpc Conn
-	if err := grpc.ExecTestConn(context.Background()); err != nil {
+	if err := grpc_server.ExecTestConn(context.Background()); err != nil {
 		log.Printf("Fail to open rpc conn: %v\n", err.Error())
 	}
 	// 启动httpServer
