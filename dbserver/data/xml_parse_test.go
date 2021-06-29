@@ -1,9 +1,10 @@
-package model
+package data
 
 import (
 	"encoding/xml"
 	"io/ioutil"
 	"log"
+	"lxh027.com/xml-dbms/dbserver/data/model"
 	"testing"
 )
 
@@ -13,7 +14,7 @@ func TestXmlServerParse(t *testing.T)  {
 	if err != nil {
 		log.Panicf(err.Error())
 	}
-	var serverData Server
+	var serverData model.Server
 	err = xml.Unmarshal(xmlData, &serverData)
 	if err != nil {
 		log.Panicf(err.Error())
@@ -27,7 +28,7 @@ func TestXmlDatabaseParse(t *testing.T)  {
 	if err != nil {
 		log.Panicf(err.Error())
 	}
-	var dataBaseData DataBase
+	var dataBaseData model.DataBase
 	err = xml.Unmarshal(xmlData, &dataBaseData)
 	if err != nil {
 		log.Panicf(err.Error())
@@ -41,7 +42,7 @@ func TestXmlDataParse(t *testing.T)  {
 	if err != nil {
 		log.Panicf(err.Error())
 	}
-	var data AllData
+	var data model.AllData
 	err = xml.Unmarshal(xmlData, &data)
 	if err != nil {
 		log.Panicf(err.Error())

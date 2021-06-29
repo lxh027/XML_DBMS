@@ -3,10 +3,9 @@ package model
 import "encoding/xml"
 
 type Server struct {
-	XMLName 	xml.Name 	`xml:"server"`
-	Interval 	int 		`xml:"interval"`
-	Password 	string 		`xml:"password"`
-	DataBases 	[]DataBaseInfo	`xml:"database"`
+	XMLName 	xml.Name        `xml:"server"`
+	Password 	string          `xml:"password"`
+	DataBases 	[]DataBaseInfo 	`xml:"database"`
 }
 
 type DataBaseInfo struct {
