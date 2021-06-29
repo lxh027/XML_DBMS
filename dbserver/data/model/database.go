@@ -10,12 +10,13 @@ type DataBase struct {
 
 type Table struct {
 	XMLName		xml.Name `xml:"table"`
+	Name 		string 		`xml:"name"`
 	Location	string      `xml:"location"`
-	Columns 	[]Column     `xml:"column"`
-	Indexes 	[]Column     `xml:"index"`
+	Columns 	[]column     `xml:"column"`
+	Indexes 	[]column     `xml:"index"`
 }
 
-type Column struct {
+type column struct {
 	Name 	string 	`xml:"name"`
 	Type 	string 	`xml:"type"`
 }

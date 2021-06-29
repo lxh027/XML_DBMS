@@ -4,9 +4,9 @@ import "encoding/xml"
 
 type AllData struct {
 	XMLName	xml.Name `xml:"rows"`
-	Rows 	[]Row       `xml:"row"`
+	Rows 	[]row       `xml:"row"`
 }
 
-type Row struct {
+type row struct {
 	Data 	[]string 	`xml:"data"`
 }

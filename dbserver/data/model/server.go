@@ -5,10 +5,10 @@ import "encoding/xml"
 type Server struct {
 	XMLName 	xml.Name        `xml:"server"`
 	Password 	string          `xml:"password"`
-	DataBases 	[]DataBaseInfo 	`xml:"database"`
+	DataBases 	[]dataBaseInfo 	`xml:"database"`
 }
 
-type DataBaseInfo struct {
+type dataBaseInfo struct {
 	Location 	string 		`xml:"location"`
 	Name 		string 		`xml:"name"`
 }
