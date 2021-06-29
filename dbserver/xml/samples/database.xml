@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<database>
+    <name>databaseSample</name>
+    <table>
+        <location>pos1</location>
+        <column>
+            <name>c1</name>
+            <type>int</type>
+        </column>
+        <column>
+            <name>c2</name>
+            <type>string</type>
+        </column>
+        <index>
+            <name>c1</name>
+            <type>int</type>
+        </index>
+    </table>
+    <table>
+        <location>pos2</location>
+        <column>
+            <name>c1</name>
+            <type>int</type>
+        </column>
+        <column>
+            <name>c2</name>
+            <type>string</type>
+        </column>
+        <index>
+            <name>c2</name>
+            <type>string</type>
+        </index>
+    </table>
+</database>
