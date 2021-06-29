@@ -12,5 +12,5 @@ func Routes(router *gin.Engine)  {
 
 	router.POST("/exeSql", controller.ExecSql)
 
-	router.StaticFS("/admin/", http.Dir("./web"))
+	router.StaticFS("/sql/", http.Dir("./web"))
 }
