@@ -5,6 +5,7 @@ import (
 	"google.golang.org/grpc"
 	"log"
 	"lxh027.com/xml-dbms/config"
+	"lxh027.com/xml-dbms/dbserver/data/runtime"
 	"lxh027.com/xml-dbms/proto"
 	"net"
 )
@@ -12,7 +13,10 @@ import (
 type dbRpcServer struct {}
 
 func (server *dbRpcServer) Auth(c context.Context, request *proto.AuthRequest) (*proto.AuthResponse, error)  {
-	panic("")
+	if request.Password == runtime.Server.Password {
+		return &proto.AuthResponse{Message: "验证成功", Status: proto.AuthResponse_OK}, nil
+	}
+	return &proto.AuthResponse{Message: "验证失败", Status: proto.AuthResponse_Error}, nil
 }
 
 func (server *dbRpcServer) SqlExecute(c context.Context, expression *proto.SQLExpression) (*proto.SqlResult, error)  {

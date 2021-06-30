@@ -6,6 +6,7 @@ import (
 	"lxh027.com/xml-dbms/api-web/grpc_client"
 	"lxh027.com/xml-dbms/api-web/helper"
 	"lxh027.com/xml-dbms/constants"
+	"lxh027.com/xml-dbms/proto"
 	"net/http"
 )
 
@@ -35,7 +36,7 @@ func Auth(c *gin.Context)  {
 	if err != nil {
 		c.JSON(http.StatusOK, helper.ApiReturn(constants.CodeError, "data server访问失败", err.Error()))
 		return
-	} else if authResponse.Status != constants.AuthOK {
+	} else if authResponse.Status != proto.AuthResponse_OK {
 		c.JSON(http.StatusOK, helper.ApiReturn(constants.CodeError, "验证失败", authResponse.Message))
 		return
 	}
