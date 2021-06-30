@@ -11,7 +11,7 @@ import (
 var server *model.Server
 var databases map[string]*model.DataBase
 var tables map[string]*model.AllData
-var indexes map[string]*model.Indexes
+//var indexes map[string]*model.Indexes
 
 func LoadDataFromXML()  {
 	// 加载根信息
@@ -27,7 +27,7 @@ func LoadDataFromXML()  {
 	log.Printf("加载根信息成功: %v", server)
 	databases = make(map[string]*model.DataBase)
 	tables = make(map[string]*model.AllData)
-	indexes = make(map[string]*model.Indexes)
+	//indexes = make(map[string]*model.Indexes)
 	for _, databaseInfo := range server.DataBases {
 		xmlData, err := ioutil.ReadFile(databaseInfo.Location)
 		if err != nil {
@@ -54,7 +54,7 @@ func LoadDataFromXML()  {
 			log.Printf("加载数据信息成功: %v", data)
 			tables[databaseInfo.Name+"."+tableInfo.Name] = &data
 			// 构造索引
-			indexes[databaseInfo.Name+"."+tableInfo.Name] = buildIndex(databaseInfo.Name, &tableInfo)
+			//indexes[databaseInfo.Name+"."+tableInfo.Name] = buildIndex(databaseInfo.Name, &tableInfo)
 		}
 	}
 }
