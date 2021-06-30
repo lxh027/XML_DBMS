@@ -62,6 +62,18 @@ func LoadDataFromXML()  {
 	UsedDatabase = ""
 }
 
+func GetDatabaseInfoIndex(name string) (int, bool) {
+	var index int
+	for index = 0; index < len(Server.DataBases); index++ {
+		if Server.DataBases[index].Name == name {
+			break
+		}
+	}
+	if index == len(Server.DataBases) {
+		return -1, false
+	}
+	return index, true
+}
 
 func buildIndex(databaseName string, table *model.Table) *model.Indexes  {
 	indexes := make(model.Indexes, 0)

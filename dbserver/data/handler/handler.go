@@ -14,7 +14,7 @@ type Handler interface {
 }
 
 func SaveRootXmlFile() error {
-	systemXmlFile, err := os.Open(config.DbConfig.Root)
+	systemXmlFile, err := os.OpenFile(config.DbConfig.Root, os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0644)
 	if systemXmlFile != nil {
 		defer systemXmlFile.Close()
 	}

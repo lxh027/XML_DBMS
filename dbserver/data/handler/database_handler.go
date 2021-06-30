@@ -17,7 +17,7 @@ type DataBaseHandler struct {
 
 func (handler *DataBaseHandler) ExecSql() error {
 	if err := handler.SaveToRuntime(); err != nil {
-		return nil
+		return err
 	}
 	return handler.SaveToXMLFile()
 }
@@ -43,11 +43,9 @@ func (handler *DataBaseHandler) SaveToRuntime() error {
 			if _, ok := runtime.Databases[handler.Name]; !ok {
 				return errors.New("database non-existed")
 			}
-			var index int
-			for index = 0; index < len(runtime.Server.DataBases); index++ {
-				if runtime.Server.DataBases[index].Name == handler.Name {
-					break
-				}
+			index, ok := runtime.GetDatabaseInfoIndex(handler.Name)
+			if !ok {
+				return errors.New("database non-existed")
 			}
 			runtime.Server.DataBases = append(runtime.Server.DataBases[:index-1],
 				runtime.Server.DataBases[index+1:]...)

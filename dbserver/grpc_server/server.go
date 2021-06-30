@@ -5,9 +5,14 @@ import (
 	"google.golang.org/grpc"
 	"log"
 	"lxh027.com/xml-dbms/config"
+	"lxh027.com/xml-dbms/dbserver/data/handler"
 	"lxh027.com/xml-dbms/dbserver/data/runtime"
+	"lxh027.com/xml-dbms/dbserver/parser"
+	"lxh027.com/xml-dbms/dbserver/parser/parsed_data"
+	"lxh027.com/xml-dbms/dbserver/parser/tokenizer"
 	"lxh027.com/xml-dbms/proto"
 	"net"
+	"reflect"
 )
 
 type dbRpcServer struct {}
@@ -20,6 +25,64 @@ func (server *dbRpcServer) Auth(c context.Context, request *proto.AuthRequest) (
 }
 
 func (server *dbRpcServer) SqlExecute(c context.Context, expression *proto.SQLExpression) (*proto.SqlResult, error)  {
+	parsed, err := parser.ParseSql(expression.Sql)
+	if err != nil {
+		return &proto.SqlResult{
+			Status: proto.SqlResult_Syntax_Error,
+			Message: "解析sql失败",
+			MetaData: []string{"message"},
+			Data: []*proto.SqlResult_DataRow{{DataCell: []string{err.Error()}}},
+		}, nil
+	}
+	log.Printf("parsed is a type of %v\n", reflect.TypeOf(parsed))
+	switch reflect.TypeOf(parsed) {
+	case reflect.TypeOf(&parsed_data.ParsedBasicData{}):
+		{
+			parsedBasicData := parsed.(*parsed_data.ParsedBasicData)
+			if parsedBasicData.Target == tokenizer.Database {
+				var databaseHandler handler.DataBaseHandler
+				databaseHandler.Name = parsedBasicData.Name
+				databaseHandler.Operation = parsedBasicData.Operation
+				if parsedBasicData.Operation == tokenizer.Create {
+					databaseHandler.Location = config.DbConfig.DatabasePath+parsedBasicData.Name+".xml"
+				} else if parsedBasicData.Operation == tokenizer.Drop {
+					index, ok := runtime.GetDatabaseInfoIndex(parsedBasicData.Name)
+					if !ok {
+						return &proto.SqlResult{
+							Status: proto.SqlResult_Syntax_Error,
+							Message: "database不存在",
+							MetaData: []string{"message"},
+							Data: []*proto.SqlResult_DataRow{{DataCell: []string{"database不存在"}}},
+						}, nil
+					}
+					databaseHandler.Location = runtime.Server.DataBases[index].Location
+				}
+				if err := databaseHandler.ExecSql(); err != nil {
+					log.Printf("error: %v\n", err.Error())
+					return &proto.SqlResult{
+						Status: proto.SqlResult_Sql_Error,
+						Message: "运行错误",
+						MetaData: []string{"message"},
+						Data: []*proto.SqlResult_DataRow{{DataCell: []string{err.Error()}}},
+					}, nil
+				}
+				return &proto.SqlResult{
+					Status: proto.SqlResult_OK,
+					Message: "运行成功",
+					MetaData: []string{"message"},
+					Data: []*proto.SqlResult_DataRow{{DataCell: []string{"ok"}}},
+				}, nil
+			}
+		}
+	case reflect.TypeOf(&parsed_data.ParsedCreateTable{}):
+		{
+
+		}
+	case reflect.TypeOf(&parsed_data.ParsedCreateView{}):
+		{
+
+		}
+	}
 	panic("")
 }
 
