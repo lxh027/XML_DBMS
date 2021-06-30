@@ -27,8 +27,8 @@ func Auth(c *gin.Context)  {
 		Password string `json:"password"`
 	}
 	// 获取参数
-	if err := c.ShouldBind(accessJson); err != nil {
-		c.JSON(http.StatusOK, helper.ApiReturn(constants.CodeError, "参数错误", nil))
+	if err := c.ShouldBind(&accessJson); err != nil {
+		c.JSON(http.StatusOK, helper.ApiReturn(constants.CodeError, "参数错误", err.Error()))
 		return
 	}
 	// 访问db_server验证密码
