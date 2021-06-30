@@ -14,8 +14,9 @@ func TestXmlServerParse(t *testing.T)  {
 	if err != nil {
 		log.Panicf(err.Error())
 	}
-	var serverData model.Server
-	err = xml.Unmarshal(xmlData, &serverData)
+	var serverData *model.Server
+	serverData = new(model.Server)
+	err = xml.Unmarshal(xmlData, serverData)
 	if err != nil {
 		log.Panicf(err.Error())
 	}
