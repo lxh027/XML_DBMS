@@ -9,8 +9,8 @@ import (
 var DbConfig struct {
 	Root 			string 	`yml:"root"`
 	Interval 		int 	`yml:"interval"`
-	DatabasePath 	string 	`yml:"database_path"`
-	TablePath 		string 	`yml:"table_path"`
+	DatabasePath 	string 	`yml:"databasepath"`
+	TablePath 		string 	`yml:"tablepath"`
 }
 
 func init() {
