@@ -5,7 +5,7 @@ import "encoding/xml"
 type Server struct {
 	XMLName 	xml.Name         `xml:"server"`
 	Password 	string          `xml:"password"`
-	DataBases 	[]DataBaseInfo `xml:"database"`
+	DataBases 	[]DataBaseInfo `xml:"database,omitempty"`
 }
 
 type DataBaseInfo struct {

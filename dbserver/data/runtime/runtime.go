@@ -21,6 +21,7 @@ func LoadDataFromXML()  {
 	if err != nil {
 		log.Panicf(err.Error())
 	}
+	Server = new(model.Server)
 	err = xml.Unmarshal(xmlData, Server)
 	if err != nil {
 		log.Panicf(err.Error())

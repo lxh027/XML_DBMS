@@ -2,12 +2,4 @@
 
 <server>
     <password>123456</password>
-    <database>
-        <location>p1</location>
-        <name>name1</name>
-    </database>
-    <database>
-        <location>p2</location>
-        <name>name2</name>
-    </database>
 </server>
