@@ -3,12 +3,12 @@ package model
 import "encoding/xml"
 
 type Server struct {
-	XMLName 	xml.Name        `xml:"server"`
+	XMLName 	xml.Name         `xml:"server"`
 	Password 	string          `xml:"password"`
-	DataBases 	[]dataBaseInfo 	`xml:"database"`
+	DataBases 	[]DataBaseInfo `xml:"database"`
 }
 
-type dataBaseInfo struct {
+type DataBaseInfo struct {
 	Location 	string 		`xml:"location"`
 	Name 		string 		`xml:"name"`
 }

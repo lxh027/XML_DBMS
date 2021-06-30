@@ -6,6 +6,13 @@ type DataBase struct {
 	XMLName xml.Name  `xml:"database"`
 	Name 	string    `xml:"name"`
 	Tables 	[]Table `xml:"table"`
+	Views 	[]View	`xml:"view"`
+}
+
+type View struct {
+	XMLName 	xml.Name 	`xml:"view"`
+	Name 		string 		`xml:"name"`
+	Sql 		string 		`xml:"sql"`
 }
 
 type Table struct {

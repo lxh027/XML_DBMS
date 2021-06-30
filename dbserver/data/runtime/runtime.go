@@ -11,6 +11,7 @@ import (
 var Server *model.Server
 var Databases map[string]*model.DataBase
 var Tables map[string]*model.AllData
+var UsedDatabase string
 //var indexes map[string]*model.Indexes
 
 func LoadDataFromXML()  {
@@ -57,6 +58,7 @@ func LoadDataFromXML()  {
 			//indexes[databaseInfo.Name+"."+tableInfo.Name] = buildIndex(databaseInfo.Name, &tableInfo)
 		}
 	}
+	UsedDatabase = ""
 }
 
 
