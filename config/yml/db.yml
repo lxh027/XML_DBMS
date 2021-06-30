@@ -1,2 +1,4 @@
 root: ./xml/server.xml
 interval: 60
+database_path: ./xml/databases
+table_path: ./xml/tables
