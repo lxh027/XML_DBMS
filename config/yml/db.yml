@@ -1,4 +1,4 @@
-root: ./xml/server.xml
+root: ./dbserver/xml/server.xml
 interval: 60
-database_path: ./xml/databases
-table_path: ./xml/tables
+database_path: ./dbserver/xml/databases/
+table_path: ./dbserver/xml/tables/
