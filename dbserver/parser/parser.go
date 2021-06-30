@@ -52,4 +52,5 @@ func ParseSql(sql string) (interface{}, error) {
 	default:
 		return nil, errors.New(fmt.Sprintf("parse sql error"))
 	}
+	return nil, errors.New(fmt.Sprintf("parse sql error"))
 }
