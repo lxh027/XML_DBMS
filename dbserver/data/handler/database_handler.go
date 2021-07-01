@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"encoding/xml"
 	"errors"
 	"lxh027.com/xml-dbms/dbserver/data/model"
 	"lxh027.com/xml-dbms/dbserver/data/runtime"
@@ -47,11 +46,34 @@ func (handler *DataBaseHandler) SaveToRuntime() error {
 			if !ok {
 				return errors.New("database non-existed")
 			}
-			runtime.Server.DataBases = append(runtime.Server.DataBases[:index-1],
-				runtime.Server.DataBases[index+1:]...)
+			if index == 0 {
+				if len(runtime.Server.DataBases) == 1 {
+					runtime.Server.DataBases = make([]model.DataBaseInfo, 0)
+				} else {
+					runtime.Server.DataBases = runtime.Server.DataBases[index+1:]
+				}
+			} else if index == len(runtime.Server.DataBases)-1 {
+				runtime.Server.DataBases = runtime.Server.DataBases[:index-1]
+			} else {
+				runtime.Server.DataBases =
+					append(runtime.Server.DataBases[:index-1],
+						runtime.Server.DataBases[index+1:]...)
+			}
 			delete(runtime.Databases, handler.Name)
 			return nil
 		}
+	case tokenizer.Use:
+		{
+			if _, ok := runtime.Databases[handler.Name]; !ok {
+				return errors.New("database non-existed")
+			}
+			if _, ok := runtime.GetDatabaseInfoIndex(handler.Name);!ok {
+				return errors.New("database non-existed")
+			}
+			runtime.UsedDatabase = handler.Name
+			return nil
+		}
+
 	default:
 		return errors.New("unknown error")
 	}
@@ -61,15 +83,7 @@ func (handler *DataBaseHandler) SaveToXMLFile() error {
 	switch handler.Operation {
 	case tokenizer.Create:
 		{
-			databaseXmlFile, err := os.Create(handler.Location)
-			if databaseXmlFile != nil {
-				defer databaseXmlFile.Close()
-			}
-			if err != nil {
-				return err
-			}
-			encoder := xml.NewEncoder(databaseXmlFile)
-			err = encoder.Encode(runtime.Databases[handler.Name])
+			err := runtime.Databases[handler.Name].SaveToXmlFile(handler.Location)
 			if err != nil {
 				return err
 			}
@@ -81,6 +95,10 @@ func (handler *DataBaseHandler) SaveToXMLFile() error {
 				return nil
 			}
 			return SaveRootXmlFile()
+		}
+	case tokenizer.Use:
+		{
+			return nil
 		}
 	default:
 		return errors.New("unknown error")

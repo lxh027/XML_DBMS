@@ -1,6 +1,9 @@
 package model
 
-import "encoding/xml"
+import (
+	"encoding/xml"
+	"os"
+)
 
 type DataBase struct {
 	XMLName xml.Name  `xml:"database"`
@@ -26,4 +29,26 @@ type Table struct {
 type Column struct {
 	Name 	string 	`xml:"name"`
 	Type 	string 	`xml:"type"`
+}
+
+func (database *DataBase) GetTableIndex(name string) (int, bool) {
+	var index int
+	for index = 0; index < len(database.Tables); index++ {
+		if database.Tables[index].Name == name {
+			return index, true
+		}
+	}
+	return -1, false
+}
+
+func (database *DataBase) SaveToXmlFile(location string) error  {
+	databaseXmlFile, err := os.Create(location)
+	if databaseXmlFile != nil {
+		defer databaseXmlFile.Close()
+	}
+	if err != nil {
+		return err
+	}
+	encoder := xml.NewEncoder(databaseXmlFile)
+	return encoder.Encode(database)
 }

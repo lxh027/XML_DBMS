@@ -34,6 +34,10 @@ func (sqlTokens *SqlTokens) parseMove(pos int) error  {
 	} else if sqlTokens.equals(pos, Drop) {
 		sqlTokens.Tokens = append(sqlTokens.Tokens, Token{Name: sql[pos:pos+len(Drop)], Type: Drop})
 		return sqlTokens.parseTarget(pos+ len(Drop))
+	} else if sqlTokens.equals(pos, Use) {
+		sqlTokens.Tokens = append(sqlTokens.Tokens, Token{Name: sql[pos:pos+len(Use)], Type: Use})
+		pos += len(Use)
+		return sqlTokens.parseName(&pos)
 	}
 	return errors.New(fmt.Sprintf("Syntax Error in %v", pos))
 }

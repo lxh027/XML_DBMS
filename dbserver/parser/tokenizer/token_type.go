@@ -15,6 +15,8 @@ const (
 const (
 	Create 		= "create"
 	Drop 		= "drop"
+	Use  		= "use"
+	Show 		= "show"
 )
 
 const (

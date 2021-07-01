@@ -37,6 +37,9 @@ func ParseSql(sql string) (interface{}, error) {
 					columns := make([]model.Column, 0)
 					for i := 4; tokens.Tokens[i].Type != tokenizer.RightCell; i+=2 {
 						columns = append(columns, model.Column{Name: tokens.Tokens[i].Name, Type: tokens.Tokens[i+1].Name})
+						if tokens.Tokens[i+2].Type == tokenizer.Comma {
+							i++
+						}
 					}
 					parsed.Columns = columns
 					return &parsed, nil
@@ -47,6 +50,12 @@ func ParseSql(sql string) (interface{}, error) {
 		{
 			var parsed parsed_data.ParsedBasicData
 			parsed.SetBasicInfo(tokens.Tokens[0].Type, tokens.Tokens[1].Type, tokens.Tokens[2].Name)
+			return &parsed, nil
+		}
+	case tokenizer.Use:
+		{
+			var parsed parsed_data.ParsedBasicData
+			parsed.SetBasicInfo(tokens.Tokens[0].Type, tokenizer.Use, tokens.Tokens[1].Name)
 			return &parsed, nil
 		}
 	default:

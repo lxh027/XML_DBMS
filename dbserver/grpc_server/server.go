@@ -5,7 +5,6 @@ import (
 	"google.golang.org/grpc"
 	"log"
 	"lxh027.com/xml-dbms/config"
-	"lxh027.com/xml-dbms/dbserver/data/handler"
 	"lxh027.com/xml-dbms/dbserver/data/runtime"
 	"lxh027.com/xml-dbms/dbserver/parser"
 	"lxh027.com/xml-dbms/dbserver/parser/parsed_data"
@@ -40,43 +39,19 @@ func (server *dbRpcServer) SqlExecute(c context.Context, expression *proto.SQLEx
 		{
 			parsedBasicData := parsed.(*parsed_data.ParsedBasicData)
 			if parsedBasicData.Target == tokenizer.Database {
-				var databaseHandler handler.DataBaseHandler
-				databaseHandler.Name = parsedBasicData.Name
-				databaseHandler.Operation = parsedBasicData.Operation
-				if parsedBasicData.Operation == tokenizer.Create {
-					databaseHandler.Location = config.DbConfig.DatabasePath+parsedBasicData.Name+".xml"
-				} else if parsedBasicData.Operation == tokenizer.Drop {
-					index, ok := runtime.GetDatabaseInfoIndex(parsedBasicData.Name)
-					if !ok {
-						return &proto.SqlResult{
-							Status: proto.SqlResult_Syntax_Error,
-							Message: "database不存在",
-							MetaData: []string{"message"},
-							Data: []*proto.SqlResult_DataRow{{DataCell: []string{"database不存在"}}},
-						}, nil
-					}
-					databaseHandler.Location = runtime.Server.DataBases[index].Location
-				}
-				if err := databaseHandler.ExecSql(); err != nil {
-					log.Printf("error: %v\n", err.Error())
-					return &proto.SqlResult{
-						Status: proto.SqlResult_Sql_Error,
-						Message: "运行错误",
-						MetaData: []string{"message"},
-						Data: []*proto.SqlResult_DataRow{{DataCell: []string{err.Error()}}},
-					}, nil
-				}
-				return &proto.SqlResult{
-					Status: proto.SqlResult_OK,
-					Message: "运行成功",
-					MetaData: []string{"message"},
-					Data: []*proto.SqlResult_DataRow{{DataCell: []string{"ok"}}},
-				}, nil
+				return handleDatabase(parsedBasicData)
+			} else if parsedBasicData.Target == tokenizer.Table {
+				return handleTableDrop(parsedBasicData)
+			} else if parsedBasicData.Target == tokenizer.View {
+
+			} else if parsedBasicData.Target == tokenizer.Use {
+				return handlerUse(parsedBasicData)
 			}
 		}
 	case reflect.TypeOf(&parsed_data.ParsedCreateTable{}):
 		{
-
+			parsedCreateTable := parsed.(*parsed_data.ParsedCreateTable)
+			return handlerTableCreate(parsedCreateTable)
 		}
 	case reflect.TypeOf(&parsed_data.ParsedCreateView{}):
 		{
