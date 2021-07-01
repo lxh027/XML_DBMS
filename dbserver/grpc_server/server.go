@@ -17,6 +17,11 @@ import (
 type dbRpcServer struct {}
 
 func (server *dbRpcServer) Auth(c context.Context, request *proto.AuthRequest) (*proto.AuthResponse, error)  {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Printf("recover from panic: %v", err)
+		}
+	}()
 	if request.Password == runtime.Server.Password {
 		return &proto.AuthResponse{Message: "验证成功", Status: proto.AuthResponse_OK}, nil
 	}
@@ -24,6 +29,11 @@ func (server *dbRpcServer) Auth(c context.Context, request *proto.AuthRequest) (
 }
 
 func (server *dbRpcServer) SqlExecute(c context.Context, expression *proto.SQLExpression) (*proto.SqlResult, error)  {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Printf("recover from panic: %v", err)
+		}
+	}()
 	parsed, err := parser.ParseSql(expression.Sql)
 	if err != nil {
 		return &proto.SqlResult{
@@ -70,6 +80,11 @@ func (server *dbRpcServer) SqlExecute(c context.Context, expression *proto.SQLEx
 }
 
 func (server *dbRpcServer) TestConn(c context.Context, ping *proto.Ping) (*proto.Pong, error)  {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Printf("recover from panic: %v", err)
+		}
+	}()
 	return &proto.Pong{Pong: "hello "+ping.Ping}, nil
 }
 
