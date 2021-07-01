@@ -28,7 +28,7 @@ func ExecSql(c *gin.Context)  {
 		c.JSON(http.StatusOK, helper.ApiReturn(constants.CodeError, "data server访问失败", err.Error()))
 		return
 	} else if sqlResult.Status != constants.SqlOK {
-		c.JSON(http.StatusOK, helper.ApiReturn(constants.CodeError, "执行失败", sqlResult.Message))
+		c.JSON(http.StatusOK, helper.ApiReturn(constants.CodeError, "执行失败", sqlResult))
 		return
 	}
 
