@@ -66,13 +66,54 @@ func handleTableDrop(parsedBasicData *parsed_data.ParsedBasicData) (*proto.SqlRe
 	}, nil
 }
 
-func handlerTableCreate(table *parsed_data.ParsedCreateTable) (*proto.SqlResult, error)  {
+func handleTableCreate(table *parsed_data.ParsedCreateTable) (*proto.SqlResult, error)  {
 	var tableHandler handler.TableHandler
 	tableHandler.Name = table.Name
 	tableHandler.Operation = table.Operation
 	tableHandler.Location = config.DbConfig.TablePath + runtime.UsedDatabase+"."+table.Name+".xml"
 	tableHandler.Columns = table.Columns
 	if err := tableHandler.ExecSql(); err != nil {
+		return &proto.SqlResult{
+			Status: proto.SqlResult_Sql_Error,
+			Message: "运行错误",
+			MetaData: []string{"message"},
+			Data: []*proto.SqlResult_DataRow{{DataCell: []string{err.Error()}}},
+		}, nil
+	}
+	return &proto.SqlResult{
+		Status: proto.SqlResult_OK,
+		Message: "运行成功",
+		MetaData: []string{"message"},
+		Data: []*proto.SqlResult_DataRow{{DataCell: []string{"ok"}}},
+	}, nil
+}
+
+func handleViewDrop(parsedBasicData *parsed_data.ParsedBasicData) (*proto.SqlResult, error) {
+	var viewHandler handler.ViewHandler
+	viewHandler.Name = parsedBasicData.Name
+	viewHandler.Operation = parsedBasicData.Operation
+	if err := viewHandler.ExecSql(); err != nil {
+		return &proto.SqlResult{
+			Status: proto.SqlResult_Sql_Error,
+			Message: "运行错误",
+			MetaData: []string{"message"},
+			Data: []*proto.SqlResult_DataRow{{DataCell: []string{err.Error()}}},
+		}, nil
+	}
+	return &proto.SqlResult{
+		Status: proto.SqlResult_OK,
+		Message: "运行成功",
+		MetaData: []string{"message"},
+		Data: []*proto.SqlResult_DataRow{{DataCell: []string{"ok"}}},
+	}, nil
+}
+
+func handleViewCreate(table *parsed_data.ParsedCreateView) (*proto.SqlResult, error)  {
+	var viewHandler handler.ViewHandler
+	viewHandler.Name = table.Name
+	viewHandler.Operation = table.Operation
+	viewHandler.Sql = table.Sql
+	if err := viewHandler.ExecSql(); err != nil {
 		return &proto.SqlResult{
 			Status: proto.SqlResult_Sql_Error,
 			Message: "运行错误",

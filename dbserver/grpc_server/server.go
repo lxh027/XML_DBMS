@@ -43,7 +43,7 @@ func (server *dbRpcServer) SqlExecute(c context.Context, expression *proto.SQLEx
 			} else if parsedBasicData.Target == tokenizer.Table {
 				return handleTableDrop(parsedBasicData)
 			} else if parsedBasicData.Target == tokenizer.View {
-
+				return handleViewDrop(parsedBasicData)
 			} else if parsedBasicData.Target == tokenizer.Use {
 				return handlerUse(parsedBasicData)
 			}
@@ -51,14 +51,20 @@ func (server *dbRpcServer) SqlExecute(c context.Context, expression *proto.SQLEx
 	case reflect.TypeOf(&parsed_data.ParsedCreateTable{}):
 		{
 			parsedCreateTable := parsed.(*parsed_data.ParsedCreateTable)
-			return handlerTableCreate(parsedCreateTable)
+			return handleTableCreate(parsedCreateTable)
 		}
 	case reflect.TypeOf(&parsed_data.ParsedCreateView{}):
 		{
-
+			parsedView := parsed.(*parsed_data.ParsedCreateView)
+			return handleViewCreate(parsedView)
 		}
 	}
-	panic("")
+	return &proto.SqlResult{
+		Status: proto.SqlResult_Syntax_Error,
+		Message: "sql分析出错",
+		MetaData: []string{"message"},
+		Data: []*proto.SqlResult_DataRow{{DataCell: []string{"sql分析出错"}}},
+	}, nil
 }
 
 func (server *dbRpcServer) TestConn(c context.Context, ping *proto.Ping) (*proto.Pong, error)  {

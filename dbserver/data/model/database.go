@@ -31,6 +31,16 @@ type Column struct {
 	Type 	string 	`xml:"type"`
 }
 
+func (database *DataBase) GetViewIndex(name string) (int, bool)  {
+	var index int
+	for index = 0; index < len(database.Views); index++ {
+		if database.Views[index].Name == name {
+			return index, true
+		}
+	}
+	return -1, false
+}
+
 func (database *DataBase) GetTableIndex(name string) (int, bool) {
 	var index int
 	for index = 0; index < len(database.Tables); index++ {
