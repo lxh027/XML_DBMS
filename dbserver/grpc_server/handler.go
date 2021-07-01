@@ -148,3 +148,76 @@ func handlerUse(table *parsed_data.ParsedBasicData) (*proto.SqlResult, error)  {
 		Data: []*proto.SqlResult_DataRow{{DataCell: []string{"ok"}}},
 	}, nil
 }
+
+func handleShow(table *parsed_data.ParsedBasicData) (*proto.SqlResult, error)  {
+	switch table.Name {
+	case "databases":
+		{
+			databases := make([]*proto.SqlResult_DataRow, 0)
+			for _, databaseInfo := range runtime.Server.DataBases {
+				databaseName := databaseInfo.Name
+				if databaseName == runtime.UsedDatabase {
+					databaseName = "* "+databaseName
+				}
+				dataRow := proto.SqlResult_DataRow{DataCell: []string{databaseName}}
+				databases = append(databases, &dataRow)
+			}
+			return &proto.SqlResult{
+				Status: proto.SqlResult_OK,
+				Message: "运行成功",
+				MetaData: []string{"database"},
+				Data: databases,
+			}, nil
+		}
+	case "tables":
+		{
+			if runtime.UsedDatabase == "" {
+				return &proto.SqlResult{
+					Status: proto.SqlResult_Sql_Error,
+					Message: "运行错误",
+					MetaData: []string{"message"},
+					Data: []*proto.SqlResult_DataRow{{DataCell: []string{"database unselected"}}},
+				}, nil
+			}
+			tables := make([]*proto.SqlResult_DataRow, 0)
+			for _, tableInfo := range runtime.Databases[runtime.UsedDatabase].Tables {
+				dataRow := proto.SqlResult_DataRow{DataCell: []string{tableInfo.Name}}
+				tables = append(tables, &dataRow)
+			}
+			return &proto.SqlResult{
+				Status: proto.SqlResult_OK,
+				Message: "获取成功",
+				MetaData: []string{"table"},
+				Data: tables,
+			}, nil
+	}
+	case "views":
+		{
+			if runtime.UsedDatabase == "" {
+				return &proto.SqlResult{
+					Status: proto.SqlResult_Sql_Error,
+					Message: "运行错误",
+					MetaData: []string{"message"},
+					Data: []*proto.SqlResult_DataRow{{DataCell: []string{"database unselected"}}},
+				}, nil
+			}
+			views := make([]*proto.SqlResult_DataRow, 0)
+			for _, viewInfo := range runtime.Databases[runtime.UsedDatabase].Views {
+				dataRow := proto.SqlResult_DataRow{DataCell: []string{viewInfo.Name, viewInfo.Sql}}
+				views = append(views, &dataRow)
+			}
+			return &proto.SqlResult{
+				Status: proto.SqlResult_OK,
+				Message: "获取成功",
+				MetaData: []string{"view", "sql"},
+				Data: views,
+			}, nil
+		}
+	}
+	return &proto.SqlResult{
+		Status: proto.SqlResult_Sql_Error,
+		Message: "运行错误",
+		MetaData: []string{"message"},
+		Data: []*proto.SqlResult_DataRow{{DataCell: []string{"show的对象不存在"}}},
+	}, nil
+}

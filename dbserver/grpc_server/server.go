@@ -46,6 +46,8 @@ func (server *dbRpcServer) SqlExecute(c context.Context, expression *proto.SQLEx
 				return handleViewDrop(parsedBasicData)
 			} else if parsedBasicData.Target == tokenizer.Use {
 				return handlerUse(parsedBasicData)
+			} else if parsedBasicData.Target == tokenizer.Show {
+				return handleShow(parsedBasicData)
 			}
 		}
 	case reflect.TypeOf(&parsed_data.ParsedCreateTable{}):

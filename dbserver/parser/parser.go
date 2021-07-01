@@ -58,6 +58,11 @@ func ParseSql(sql string) (interface{}, error) {
 			parsed.SetBasicInfo(tokens.Tokens[0].Type, tokenizer.Use, tokens.Tokens[1].Name)
 			return &parsed, nil
 		}
+	case tokenizer.Show:
+		{
+			var parsed parsed_data.ParsedBasicData
+			parsed.SetBasicInfo(tokens.Tokens[0].Type, tokenizer.Show, tokens.Tokens[1].Name)
+		}
 	default:
 		return nil, errors.New(fmt.Sprintf("parse sql error"))
 	}
