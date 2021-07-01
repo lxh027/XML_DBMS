@@ -2,3 +2,4 @@ root: ./dbserver/xml/server.xml
 interval: 60
 databasepath: ./dbserver/xml/databases/
 tablepath: ./dbserver/xml/tables/
+default: default

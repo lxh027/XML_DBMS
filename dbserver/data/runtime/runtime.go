@@ -59,7 +59,7 @@ func LoadDataFromXML()  {
 			//indexes[databaseInfo.Name+"."+tableInfo.Name] = buildIndex(databaseInfo.Name, &tableInfo)
 		}
 	}
-	UsedDatabase = ""
+	UsedDatabase = config.DbConfig.Default
 }
 
 func GetDatabaseInfoIndex(name string) (int, bool) {

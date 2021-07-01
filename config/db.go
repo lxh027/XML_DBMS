@@ -11,6 +11,7 @@ var DbConfig struct {
 	Interval 		int 	`yml:"interval"`
 	DatabasePath 	string 	`yml:"databasepath"`
 	TablePath 		string 	`yml:"tablepath"`
+	Default 		string 	`yml:"default"`
 }
 
 func init() {
