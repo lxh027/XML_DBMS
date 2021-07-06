@@ -45,10 +45,10 @@ func (handler *ViewHandler) SaveToRuntime() error {
 					runtime.Databases[runtime.UsedDatabase].Views = runtime.Databases[runtime.UsedDatabase].Views[index+1:]
 				}
 			} else if index == len(runtime.Databases[runtime.UsedDatabase].Views)-1 {
-				runtime.Databases[runtime.UsedDatabase].Views = runtime.Databases[runtime.UsedDatabase].Views[:index-1]
+				runtime.Databases[runtime.UsedDatabase].Views = runtime.Databases[runtime.UsedDatabase].Views[:index]
 			} else {
 				runtime.Databases[runtime.UsedDatabase].Views =
-					append(runtime.Databases[runtime.UsedDatabase].Views[:index-1],
+					append(runtime.Databases[runtime.UsedDatabase].Views[:index],
 						runtime.Databases[runtime.UsedDatabase].Views[index+1:]...)
 			}
 			return nil

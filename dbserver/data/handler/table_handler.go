@@ -59,10 +59,10 @@ func (handler *TableHandler) SaveToRuntime() error {
 					runtime.Databases[runtime.UsedDatabase].Tables = runtime.Databases[runtime.UsedDatabase].Tables[index+1:]
 				}
 			} else if index == len(runtime.Databases[runtime.UsedDatabase].Tables)-1 {
-				runtime.Databases[runtime.UsedDatabase].Tables = runtime.Databases[runtime.UsedDatabase].Tables[:index-1]
+				runtime.Databases[runtime.UsedDatabase].Tables = runtime.Databases[runtime.UsedDatabase].Tables[:index]
 			} else {
 				runtime.Databases[runtime.UsedDatabase].Tables =
-					append(runtime.Databases[runtime.UsedDatabase].Tables[:index-1],
+					append(runtime.Databases[runtime.UsedDatabase].Tables[:index],
 						runtime.Databases[runtime.UsedDatabase].Tables[index+1:]...)
 			}
 			delete(runtime.Tables, tableName)

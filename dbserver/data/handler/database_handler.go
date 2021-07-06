@@ -53,10 +53,10 @@ func (handler *DataBaseHandler) SaveToRuntime() error {
 					runtime.Server.DataBases = runtime.Server.DataBases[index+1:]
 				}
 			} else if index == len(runtime.Server.DataBases)-1 {
-				runtime.Server.DataBases = runtime.Server.DataBases[:index-1]
+				runtime.Server.DataBases = runtime.Server.DataBases[:index]
 			} else {
 				runtime.Server.DataBases =
-					append(runtime.Server.DataBases[:index-1],
+					append(runtime.Server.DataBases[:index],
 						runtime.Server.DataBases[index+1:]...)
 			}
 			delete(runtime.Databases, handler.Name)

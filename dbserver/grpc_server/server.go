@@ -89,12 +89,14 @@ func (server *dbRpcServer) TestConn(c context.Context, ping *proto.Ping) (*proto
 }
 
 func StartRpcServer()  {
+	// 监听rpc端口
 	lis, err := net.Listen(config.RpcConfig.Network, ":"+config.RpcConfig.Port)
 	if err != nil {
 		log.Panicf("starting %v port %v error: %v\n",
 			config.RpcConfig.Network, config.RpcConfig.Host, err.Error())
 	}
 
+	// 注册服务器
 	rpcServer := grpc.NewServer()
 	proto.RegisterDBServerServer(rpcServer, &dbRpcServer{})
 
